@@ -62,7 +62,7 @@ We make changes to our Flask app code and add our Credentials in it.
 While it is advisible to use an environment variable to store the credentials.
 I have not done so here.
 
-The code itself is quite easy and it's working is explained in the app.py file through code comments.
+The code itself is quite easy and it's working is explained in the "app.py" file through code comments.
 
 We change the Following code variables and put in our Credentials from AWS
 
