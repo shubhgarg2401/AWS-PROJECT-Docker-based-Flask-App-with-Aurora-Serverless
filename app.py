@@ -17,16 +17,17 @@ aurora_secret_arn = 'your secret arn' #os.environ['SECRET_ARN']
 
 @app.route('/getPerson') # API 1 - getPerson
 def getPerson():
-    personId = request.args.get('personId')
+    personId = request.args.get('personId') #extracting the personId from the request
     response = callDbWithStatement("SELECT * FROM Persons WHERE personId='" + str(personId) + "'" )
-    person = {}
-    records = response['records']
-    for record in records:
+    person = {} #creating a response object to store our records in
+    records = response['records'] #extracting the records array from our response
+    for record in records: # we are simply getting the data in an order, it is serialised beacuase that is how dataapi works
         person['personId'] = record[0]['longValue']
         person['firstName'] = record[1]['stringValue']
         person['lastName'] = record[2]['stringValue']
-    print(person)
-    return jsonify(person)
+        #basically we a creating an object that maps directly to the result we should get back after we query
+    print(person) # printing out the contents so that we can see it in our docker container
+    return jsonify(person) # since we can not return a dictonary , we use jsonify to convert it
 
 @app.route('/createPerson',  methods=['POST']) # API 2 - createPerson
 def createPerson():
@@ -39,12 +40,12 @@ def createPerson():
     return ""
     
 def callDbWithStatement(statement):
-    response = rds_data.execute_statement(
-            database = aurora_db_name,
+    response = rds_data.execute_statement( # we are calling the execute_statement api
+            database = aurora_db_name, # we are passing it the key and credentials
             resourceArn = aurora_cluster_arn,
             secretArn = aurora_secret_arn,
             sql = statement,
-            includeResultMetadata = True
+            includeResultMetadata = True # for column names 
         )
     print("Making Call " + statement)
     print(response) #Delete this in production
